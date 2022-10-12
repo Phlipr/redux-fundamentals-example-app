@@ -7,9 +7,20 @@ const initialState = {
   entities: {},
 }
 
+const TodoActionTypes = {
+  ADD_TODO: 'todos/todoAdded',
+  TOGGLE_TODO: 'todos/todoToggled',
+  COLOR_SELECTED: 'todos/colorSelected',
+  DELETE_TODO: 'todos/todoDeleted',
+  COMPLETE_ALL: 'todos/allCompleted',
+  CLEAR_COMPLETED: 'todos/completedCleared',
+  TODOS_LOADING: 'todos/todosLoading',
+  TODOS_LOADED: 'todos/todosLoaded',
+}
+
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
-    case 'todos/todoAdded': {
+    case TodoActionTypes.ADD_TODO: {
       const todo = action.payload
       return {
         ...state,
@@ -19,7 +30,7 @@ export default function todosReducer(state = initialState, action) {
         },
       }
     }
-    case 'todos/todoToggled': {
+    case TodoActionTypes.TOGGLE_TODO: {
       const todoId = action.payload
       const todo = state.entities[todoId]
       return {
@@ -33,7 +44,7 @@ export default function todosReducer(state = initialState, action) {
         },
       }
     }
-    case 'todos/colorSelected': {
+    case TodoActionTypes.COLOR_SELECTED: {
       const { color, todoId } = action.payload
       const todo = state.entities[todoId]
       return {
@@ -47,7 +58,7 @@ export default function todosReducer(state = initialState, action) {
         },
       }
     }
-    case 'todos/todoDeleted': {
+    case TodoActionTypes.DELETE_TODO: {
       const newEntities = { ...state.entities }
       delete newEntities[action.payload]
       return {
@@ -55,7 +66,7 @@ export default function todosReducer(state = initialState, action) {
         entities: newEntities,
       }
     }
-    case 'todos/allCompleted': {
+    case TodoActionTypes.COMPLETE_ALL: {
       const newEntities = { ...state.entities }
       Object.values(newEntities).forEach((todo) => {
         newEntities[todo.id] = {
@@ -68,7 +79,7 @@ export default function todosReducer(state = initialState, action) {
         entities: newEntities,
       }
     }
-    case 'todos/completedCleared': {
+    case TodoActionTypes.CLEAR_COMPLETED: {
       const newEntities = { ...state.entities }
       Object.values(newEntities).forEach((todo) => {
         if (todo.completed) {
@@ -80,13 +91,13 @@ export default function todosReducer(state = initialState, action) {
         entities: newEntities,
       }
     }
-    case 'todos/todosLoading': {
+    case TodoActionTypes.TODOS_LOADING: {
       return {
         ...state,
         status: 'loading',
       }
     }
-    case 'todos/todosLoaded': {
+    case TodoActionTypes.TODOS_LOADED: {
       const newEntities = {}
       action.payload.forEach((todo) => {
         newEntities[todo.id] = todo
@@ -105,40 +116,40 @@ export default function todosReducer(state = initialState, action) {
 // Action creators
 
 export const todosLoaded = (todos) => ({
-  type: 'todos/todosLoaded',
+  type: TodoActionTypes.TODOS_LOADED,
   payload: todos,
 })
 
 export const todoAdded = (todo) => ({
-  type: 'todos/todoAdded',
+  type: TodoActionTypes.ADD_TODO,
   payload: todo,
 })
 
 export const toggleTodo = (todoId) => ({
-  type: 'todos/todoToggled',
+  type: TodoActionTypes.TOGGLE_TODO,
   payload: todoId,
 })
 
 export const selectColor = (color, todoId) => ({
-  type: 'todos/colorSelected',
+  type: TodoActionTypes.COLOR_SELECTED,
   payload: { color, todoId },
 })
 
 export const deleteTodo = (todoId) => ({
-  type: 'todos/todoDeleted',
+  type: TodoActionTypes.DELETE_TODO,
   payload: todoId,
 })
 
 export const todosAllCompleted = () => ({
-  type: 'todos/allCompleted',
+  type: TodoActionTypes.COMPLETE_ALL,
 })
 
 export const todosClearCompleted = () => ({
-  type: 'todos/completedCleared',
+  type: TodoActionTypes.CLEAR_COMPLETED,
 })
 
 export const todosLoading = () => ({
-  type: 'todos/todosLoading',
+  type: TodoActionTypes.TODOS_LOADING,
 })
 
 // Selectors
